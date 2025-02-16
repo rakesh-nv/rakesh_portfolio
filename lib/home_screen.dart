@@ -12,7 +12,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _homeKey = GlobalKey();
   final GlobalKey _aboutKey = GlobalKey();
-  final GlobalKey _servicesKey = GlobalKey();
+  final GlobalKey _skillsKey = GlobalKey();
+  final GlobalKey _projectKey = GlobalKey();
   final GlobalKey _contactKey = GlobalKey();
 
   void _scrollToSection(GlobalKey key) {
@@ -64,25 +65,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     ]
                   : [
                       TextButton(
-                        onPressed: () => _scrollToSection(_homeKey),
-                        child: const Text('Home',
-                            style: TextStyle(color: Colors.white)),
-                      ),
+                          onPressed: () => _scrollToSection(_homeKey),
+                          child: const Text('Home',
+                              style: TextStyle(color: Colors.white))),
                       TextButton(
-                        onPressed: () => _scrollToSection(_aboutKey),
-                        child: const Text('About',
-                            style: TextStyle(color: Colors.white)),
-                      ),
+                          onPressed: () => _scrollToSection(_aboutKey),
+                          child: const Text('About',
+                              style: TextStyle(color: Colors.white))),
                       TextButton(
-                        onPressed: () => _scrollToSection(_servicesKey),
-                        child: const Text('Services',
-                            style: TextStyle(color: Colors.white)),
-                      ),
+                          onPressed: () => _scrollToSection(_projectKey),
+                          child: const Text('Projects',
+                              style: TextStyle(color: Colors.white))),
                       TextButton(
-                        onPressed: () => _scrollToSection(_contactKey),
-                        child: const Text('Contact',
-                            style: TextStyle(color: Colors.white)),
-                      ),
+                          onPressed: () => _scrollToSection(_contactKey),
+                          child: const Text('Contact',
+                              style: TextStyle(color: Colors.white))),
                       const SizedBox(width: 20),
                       _socialIcon(FontAwesomeIcons.github),
                       _socialIcon(FontAwesomeIcons.linkedin),
@@ -95,11 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
               delegate: SliverChildListDelegate([
                 Container(key: _homeKey, child: _buildHeroSection(context)),
                 Container(key: _aboutKey, child: _buildAboutSection(context)),
-                Container(key: _servicesKey, child: _buildProjectsSection(context)),
-                _skillItem('Flutter', 0.9),
-                _skillItem('React', 0.85),
-                _skillItem('Node.js', 0.8),
-                _skillItem('UI/UX Design', 0.75),
+                Container(key: _skillsKey, child: _buildSkillsSection(context)),
+                Container(key: _projectKey, child: _buildProjectsSection(context)),
                 Container(key: _contactKey, child: _buildContactSection(context)),
               ]),
             ),
@@ -155,8 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
                     'NAVIGATION',
                     style: TextStyle(
@@ -168,16 +161,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 _drawerItem(
                     'Home', Icons.home, () => _scrollToSection(_homeKey)),
-                _drawerItem('About', Icons.person,
-                    () => _scrollToSection(_aboutKey)),
-                _drawerItem('Services', Icons.design_services,
-                    () => _scrollToSection(_servicesKey)),
+                _drawerItem(
+                    'About', Icons.person, () => _scrollToSection(_aboutKey)),
+                _drawerItem('Projects', Icons.design_services,
+                    () => _scrollToSection(_projectKey)),
                 _drawerItem('Contact', Icons.contact_mail,
                     () => _scrollToSection(_contactKey)),
                 const Divider(color: Colors.white24),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
                     'SKILLS',
                     style: TextStyle(
@@ -193,8 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _skillItem('UI/UX Design', 0.75),
                 const Divider(color: Colors.white24),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
                     'CONNECT',
                     style: TextStyle(
@@ -205,17 +196,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _drawerSocialButton(
-                          FontAwesomeIcons.github, 'GitHub'),
+                      _drawerSocialButton(FontAwesomeIcons.github, 'GitHub'),
                       _drawerSocialButton(
                           FontAwesomeIcons.linkedin, 'LinkedIn'),
-                      _drawerSocialButton(
-                          FontAwesomeIcons.twitter, 'Twitter'),
+                      _drawerSocialButton(FontAwesomeIcons.twitter, 'Twitter'),
                     ],
                   ),
                 ),
@@ -468,6 +457,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildSkillsSection(BuildContext context) {
+    return Column(
+      children: [
+        _skillItem('Flutter', 0.9),
+        _skillItem('java', 0.85),
+        _skillItem('Node.js', 0.8),
+        _skillItem('UI/UX Design', 0.75),
+      ],
+    );
+  }
+
   Widget _projectCard(String title, String description) {
     return Container(
       width: 300,
@@ -536,6 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _contactButton(FontAwesomeIcons.envelope, 'Email Me'),
               _contactButton(FontAwesomeIcons.linkedin, 'LinkedIn'),
               _contactButton(FontAwesomeIcons.github, 'GitHub'),
+              _contactButton(FontAwesomeIcons.instagram, 'instagram'),
             ],
           ),
         ],
