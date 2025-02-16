@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,6 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: const Text('About',
                               style: TextStyle(color: Colors.white))),
                       TextButton(
+                          onPressed: () => _scrollToSection(_skillsKey),
+                          child: const Text('Skills',
+                              style: TextStyle(color: Colors.white))),
+                      TextButton(
                           onPressed: () => _scrollToSection(_projectKey),
                           child: const Text('Projects',
                               style: TextStyle(color: Colors.white))),
@@ -81,10 +86,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: const Text('Contact',
                               style: TextStyle(color: Colors.white))),
                       const SizedBox(width: 20),
-                      _socialIcon(FontAwesomeIcons.github),
-                      _socialIcon(FontAwesomeIcons.linkedin),
-                      _socialIcon(FontAwesomeIcons.instagram),
-                      _socialIcon(FontAwesomeIcons.twitter),
+                      _socialIcon(FontAwesomeIcons.github,
+                          'https://github.com/rakesh-nv'),
+                      _socialIcon(FontAwesomeIcons.linkedin,
+                          'https://www.linkedin.com/in/rakesh-n-v-b72643255/'),
+                      _socialIcon(FontAwesomeIcons.instagram,
+                          'https://www.instagram.com/rakeshnv_22/?__pwa=1'),
+                      _socialIcon(FontAwesomeIcons.facebook,
+                          'https://www.facebook.com/rakesh.nv.37/'),
                       const SizedBox(width: 20),
                     ],
             ),
@@ -93,8 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(key: _homeKey, child: _buildHeroSection(context)),
                 Container(key: _aboutKey, child: _buildAboutSection(context)),
                 Container(key: _skillsKey, child: _buildSkillsSection(context)),
-                Container(key: _projectKey, child: _buildProjectsSection(context)),
-                Container(key: _contactKey, child: _buildContactSection(context)),
+                Container(
+                    key: _projectKey, child: _buildProjectsSection(context)),
+                Container(
+                    key: _contactKey, child: _buildContactSection(context)),
               ]),
             ),
           ],
@@ -124,14 +135,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: ClipOval(
                           child: Image.network(
-                            'https://placekitten.com/200/200',
+                            'assets/rakeshimg/rakesh.jpg',
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       const SizedBox(height: 10),
                       const Text(
-                        'Joe Greyson',
+                        'N V RAKESH',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -139,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const Text(
-                        'Frontend Developer',
+                        'Flutter Developer',
                         style: TextStyle(
                           color: Color(0xFF00FF66),
                           fontSize: 14,
@@ -163,26 +174,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Home', Icons.home, () => _scrollToSection(_homeKey)),
                 _drawerItem(
                     'About', Icons.person, () => _scrollToSection(_aboutKey)),
+                _drawerItem(
+                    'Skills', Icons.code, () => _scrollToSection(_skillsKey)),
                 _drawerItem('Projects', Icons.design_services,
                     () => _scrollToSection(_projectKey)),
                 _drawerItem('Contact', Icons.contact_mail,
                     () => _scrollToSection(_contactKey)),
-                const Divider(color: Colors.white24),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text(
-                    'SKILLS',
-                    style: TextStyle(
-                      color: Colors.white54,
-                      fontSize: 12,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-                _skillItem('Flutter', 0.9),
-                _skillItem('React', 0.85),
-                _skillItem('Node.js', 0.8),
-                _skillItem('UI/UX Design', 0.75),
                 const Divider(color: Colors.white24),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -201,10 +198,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _drawerSocialButton(FontAwesomeIcons.github, 'GitHub'),
-                      _drawerSocialButton(
-                          FontAwesomeIcons.linkedin, 'LinkedIn'),
-                      _drawerSocialButton(FontAwesomeIcons.twitter, 'Twitter'),
+                      _drawerSocialButton(FontAwesomeIcons.github, 'GitHub',
+                          'https://github.com/rakesh-nv'),
+                      _drawerSocialButton(FontAwesomeIcons.linkedin, 'LinkedIn',
+                          'https://www.linkedin.com/in/rakesh-n-v-b72643255/'),
+                      _drawerSocialButton(FontAwesomeIcons.instagram, 'Twitter',
+                          'https://www.instagram.com/rakeshnv_22/?__pwa=1'),
+                      _drawerSocialButton(FontAwesomeIcons.twitter, 'Twitter',
+                          'https://www.instagram.com/rakeshnv_22/?__pwa=1'),
                     ],
                   ),
                 ),
@@ -212,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    ' 2024 Joe Greyson. All rights reserved.',
+                    ' 2025 nv rakesh.',
                     style: TextStyle(
                       color: Colors.white38,
                       fontSize: 12,
@@ -241,16 +242,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _socialIcon(IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Icon(
-        icon,
-        color: Colors.white,
-        size: 20,
-      ),
-    );
-  }
+  Widget _socialIcon(IconData icon, String url) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: InkWell(
+          onTap: () async {
+            final Uri uri = Uri.parse(url);
+            try {
+              if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+                throw Exception('Could not launch $url');
+              }
+            } catch (e) {
+              debugPrint('Error launching URL: $e');
+            }
+          },
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      );
 
   Widget _buildHeroSection(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -259,10 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final isMediumScreen = screenWidth < 900;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isSmallScreen ? 20 : 50,
-        vertical: isSmallScreen ? 40 : 80,
-      ),
+      //color: Colors.red,
       child: Column(
         children: [
           if (isSmallScreen || isMediumScreen) _buildProfileImage(),
@@ -273,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                // color: Colors.yellow,
+                //color: Colors.yellow,
                 margin: EdgeInsets.only(
                     left: isSmallScreen ? 0 : screenWidth * 0.1),
                 constraints: BoxConstraints(
@@ -320,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? WrapAlignment.center
                           : WrapAlignment.start,
                       children: [
-                        _actionButton('Let\'s Talk', true),
+                        _actionButton('Resume', true),
                         _actionButton('Portfolio', false),
                       ],
                     ),
@@ -329,9 +337,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               if (!isSmallScreen && !isMediumScreen)
                 Container(
-                  height: 500,
-                  width: 500,
-                  margin: EdgeInsets.only(right: screenWidth * 0.13),
+                  //color: Colors.green,
+                  height: screenWidth * 0.4,
+                  width: screenWidth * 0.4,
+                  margin: EdgeInsets.only(right: screenWidth * 0.1),
                   //color: Colors.red,
                   constraints: const BoxConstraints(maxWidth: 800),
                   child: _buildProfileImage(),
@@ -407,7 +416,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SizedBox(height: 20),
           Text(
-            'I\'m a passionate frontend developer with expertise in creating beautiful and functional web experiences.',
+            "I am Rakesh, an MCA student at Cambridge Institute of Technology with a strong passion for mobile and web application development. I have hands-on experience in designing and developing mobile apps using Flutter and Java, along with web applications utilizing HTML, CSS, and JavaScript. Additionally, I have a solid foundation in programming languages like C, C#.NET, and Python. I am always eager to learn and explore new technologies to build innovative and efficient solutions."
+            // 'I\'m a passionate frontend developer with expertise in creating beautiful and functional web experiences.',
+            ,
             style: TextStyle(
               color: Colors.white70,
               fontSize: 18,
@@ -458,13 +469,38 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSkillsSection(BuildContext context) {
-    return Column(
-      children: [
-        _skillItem('Flutter', 0.9),
-        _skillItem('java', 0.85),
-        _skillItem('Node.js', 0.8),
-        _skillItem('UI/UX Design', 0.75),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 50),
+      child: Container(
+        //color: Colors.red,
+        child: Column(
+          children: [
+            const Text(
+              'Skills',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                _skillItem('Flutter', 0.9),
+                _skillItem('Dart', 0.85),
+                _skillItem('java', 0.85),
+                _skillItem('UI/UX Design', 0.75),
+                _skillItem('html', 0.85),
+                _skillItem('css', 0.85),
+                _skillItem('c', 0.8),
+                _skillItem('js', 0.8),
+                _skillItem('C#.Net', 0.5),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -519,24 +555,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Let\'s work together on your next project',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 18,
-            ),
-            textAlign: TextAlign.center,
-          ),
+          // const Text(
+          //   'Let\'s work together on your next project',
+          //   style: TextStyle(
+          //     color: Colors.white70,
+          //     fontSize: 18,
+          //   ),
+          //   textAlign: TextAlign.center,
+          // ),
           const SizedBox(height: 40),
           Wrap(
             spacing: 20,
             runSpacing: 20,
             alignment: WrapAlignment.center,
             children: [
-              _contactButton(FontAwesomeIcons.envelope, 'Email Me'),
-              _contactButton(FontAwesomeIcons.linkedin, 'LinkedIn'),
-              _contactButton(FontAwesomeIcons.github, 'GitHub'),
-              _contactButton(FontAwesomeIcons.instagram, 'instagram'),
+              _contactButton(FontAwesomeIcons.envelope, 'Email Me',
+                  'mailto:rakesh.nv22@gmail.com'),
+              _contactButton(FontAwesomeIcons.linkedin, 'LinkedIn',
+                  'https://www.linkedin.com/in/rakesh-n-v-b72643255/'),
+              _contactButton(FontAwesomeIcons.github, 'GitHub',
+                  'https://github.com/rakesh-nv'),
+              _contactButton(FontAwesomeIcons.instagram, 'instagram',
+                  'https://www.instagram.com/rakeshnv_22/?__pwa=1'),
             ],
           ),
         ],
@@ -544,9 +584,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _contactButton(IconData icon, String text) {
+  Widget _contactButton(IconData icon, String text, String url) {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () async {
+        final Uri uri = Uri.parse(url);
+        try {
+          if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+            throw Exception('Could not launch $url');
+          }
+        } catch (e) {
+          debugPrint('Error launching URL: $e');
+        }
+      },
       icon: FaIcon(icon),
       label: Text(text),
       style: ElevatedButton.styleFrom(
@@ -563,35 +612,47 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _skillItem(String skill, double level) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            skill,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
+      child: Container(
+        width: 300,
+        //color: Colors.black,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              skill,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          LinearProgressIndicator(
-            value: level,
-            backgroundColor: Colors.white24,
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00FF66)),
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ],
+            const SizedBox(height: 4),
+            LinearProgressIndicator(
+              value: level,
+              backgroundColor: Colors.white24,
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Color(0xFF00FF66)),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _drawerSocialButton(IconData icon, String label) {
+  Widget _drawerSocialButton(IconData icon, String label, String url) {
     return Builder(
       builder: (context) => IconButton(
         icon: FaIcon(icon),
         color: Colors.white,
-        onPressed: () {
-          Scaffold.of(context).openEndDrawer();
+        onPressed: () async {
+          final Uri uri = Uri.parse(url);
+          try {
+            if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+              throw Exception('Could not launch $url');
+            }
+          } catch (e) {
+            debugPrint('Error launching URL: $e');
+          }
         },
       ),
     );
