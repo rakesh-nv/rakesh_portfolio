@@ -398,7 +398,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildAboutSection(BuildContext context) {
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
-
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: isSmallScreen ? 20 : 50,
@@ -416,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SizedBox(height: 20),
           Text(
-            "I am Rakesh, an MCA student at Cambridge Institute of Technology with a strong passion for mobile and web application development. I have hands-on experience in designing and developing mobile apps using Flutter and Java, along with web applications utilizing HTML, CSS, and JavaScript. Additionally, I have a solid foundation in programming languages like C, C#.NET, and Python. I am always eager to learn and explore new technologies to build innovative and efficient solutions."
+            "I am Rakesh, an MCA student at Cambridge Institute of Technology with a strong passion for mobile and web application development. I have hands-on experience in designing and developing mobile apps using Flutter(expertise in Provider state management) and Java, along with web applications utilizing HTML, CSS, and JavaScript. Additionally, I have a solid foundation in programming languages like C, C#.NET, and Python. I am always eager to learn and explore new technologies to build innovative and efficient solutions."
             // 'I\'m a passionate frontend developer with expertise in creating beautiful and functional web experiences.',
             ,
             style: TextStyle(
@@ -452,15 +451,26 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 40),
           Container(
             constraints: const BoxConstraints(maxWidth: 1200),
-            child: Wrap(
-              spacing: 20,
-              runSpacing: 20,
-              alignment: WrapAlignment.center,
-              children: [
-                _projectCard('Web App', 'A modern web application'),
-                _projectCard('Mobile App', 'Cross-platform mobile app'),
-                _projectCard('UI Design', 'Creative user interfaces'),
-              ],
+            // child: Wrap(
+            //   spacing: 20,
+            //   runSpacing: 20,
+            //   alignment: WrapAlignment.center,
+            //   children: [
+            //     _projectCard('Web App', 'A modern web application'),
+            //     _projectCard('Mobile App', 'Cross-platform mobile app'),
+            //     _projectCard('UI Design', 'Creative user interfaces'),
+            //   ],
+            // ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 30,
+                children: [
+                  _projectCard('Web App', 'A modern web application'),
+                  _projectCard('Mobile App', 'Cross-platform mobile app'),
+                  _projectCard('UI Design', 'Creative user interfaces'),
+                ],
+              ),
             ),
           ),
         ],
@@ -505,32 +515,80 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _projectCard(String title, String description) {
-    return Container(
-      width: 300,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2A2A2A),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    bool isTaped = false;
+    // return Container(
+    //   width: 300,
+    //   padding: const EdgeInsets.all(20),
+    //   decoration: BoxDecoration(
+    //     color: const Color(0xFF2A2A2A),
+    //     borderRadius: BorderRadius.circular(15),
+    //   ),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Text(
+    //         title,
+    //         style: const TextStyle(
+    //           color: Colors.white,
+    //           fontSize: 24,
+    //           fontWeight: FontWeight.bold,
+    //         ),
+    //       ),
+    //       const SizedBox(height: 10),
+    //       Text(
+    //         description,
+    //         style: const TextStyle(
+    //           color: Colors.white70,
+    //           fontSize: 16,
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isTaped = !isTaped;
+        });
+      },
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          AnimatedContainer(
+            decoration: BoxDecoration(
+                color: const Color(0xFF2A2A2A),
+                borderRadius: BorderRadius.circular(20)),
+            duration: const Duration(milliseconds: 350),
+            height: isTaped ? 350 : 320,
+            // height:500,
+            width: 250,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [Text(title), Text(description), SizedBox(height: 10)],
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            description,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
+          AnimatedPositioned(
+            top: isTaped ? -100 : 10,
+            duration: const Duration(milliseconds: 350),
+            child: AnimatedContainer(
+              //color: Colors.red,
+              duration: const Duration(milliseconds: 350),
+              height: isTaped ? 300 : 250,
+              width: 250,
+              child: Column(
+                children: [
+                  AnimatedContainer(
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(20)),
+                    duration: Duration(milliseconds: 350),
+                    height: isTaped ? 300 : 250,
+                    width: isTaped ? 230 : 200,
+                  ),
+                ],
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
