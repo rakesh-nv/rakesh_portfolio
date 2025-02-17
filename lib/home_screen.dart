@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey _skillsKey = GlobalKey();
   final GlobalKey _projectKey = GlobalKey();
   final GlobalKey _contactKey = GlobalKey();
+  bool isHovered = false;
 
   void _scrollToSection(GlobalKey key) {
     final context = key.currentContext;
@@ -102,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(key: _homeKey, child: _buildHeroSection(context)),
                 Container(key: _aboutKey, child: _buildAboutSection(context)),
                 Container(key: _skillsKey, child: _buildSkillsSection(context)),
+                SizedBox(height: 20),
                 Container(
                     key: _projectKey, child: _buildProjectsSection(context)),
                 Container(
@@ -272,6 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       //color: Colors.red,
       child: Column(
+
         children: [
           if (isSmallScreen || isMediumScreen) _buildProfileImage(),
           const SizedBox(height: 30),
@@ -293,12 +297,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       : CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Hello, it\'s me',
-                      style: TextStyle(
-                        color: const Color(0xFF00FF66),
-                        fontSize: isSmallScreen ? 20 : 24,
-                      ),
+                    AnimatedTextKit(
+                      animatedTexts: [
+                        WavyAnimatedText(
+                          'Hello, it\'s me',
+                          textStyle: TextStyle(
+                            color: const Color(0xFF00FF66),
+                            fontSize: isSmallScreen ? 20 : 24,
+                          ),
+                        ),
+                      ],
+                      totalRepeatCount:5,
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -321,6 +330,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           isSmallScreen ? TextAlign.center : TextAlign.left,
                     ),
                     const SizedBox(height: 30),
+                    Container(
+                      //color: Colors.blue,
+                      height:screenHeight*0.3,
+                      width: screenWidth*0.3,
+                      child: Image.asset(
+                        'assets/rakeshimg/flutter.png',
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     Wrap(
                       spacing: 20,
                       runSpacing: 20,
@@ -329,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : WrapAlignment.start,
                       children: [
                         _actionButton('Resume', true),
-                        _actionButton('Portfolio', false),
+                        // _actionButton('Portfolio', false),
                       ],
                     ),
                   ],
@@ -379,7 +397,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _actionButton(String text, bool isPrimary) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () async {
+        if (text == 'Resume') {
+          final Uri resumeUrl = Uri.parse(
+              'https://drive.google.com/file/d/1AcqAo9W7UfcDW2krTz63SIwq_gCEcZKF/view?usp=sharing');
+          if (await canLaunchUrl(resumeUrl)) {
+            await launchUrl(resumeUrl, mode: LaunchMode.externalApplication);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Could not launch resume')),
+            );
+          }
+        }
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor:
             isPrimary ? const Color(0xFF00FF66) : Colors.transparent,
@@ -434,6 +464,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final isSmallScreen = screenWidth < 600;
 
     return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/rakeshimg/backgroundimg.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      // color: Colors.yellow,
       padding: EdgeInsets.symmetric(
         horizontal: isSmallScreen ? 20 : 50,
         vertical: isSmallScreen ? 40 : 80,
@@ -448,8 +485,9 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 100),
           Container(
+            //color: Colors.red,
             constraints: const BoxConstraints(maxWidth: 1200),
             // child: Wrap(
             //   spacing: 20,
@@ -462,13 +500,17 @@ class _HomeScreenState extends State<HomeScreen> {
             //   ],
             // ),
             child: SingleChildScrollView(
+              clipBehavior: Clip.none,
               scrollDirection: Axis.horizontal,
               child: Row(
                 spacing: 30,
                 children: [
-                  _projectCard('Web App', 'A modern web application'),
-                  _projectCard('Mobile App', 'Cross-platform mobile app'),
-                  _projectCard('UI Design', 'Creative user interfaces'),
+                  _projectCard('Web App', 'A modern web application',
+                      'assets/rakeshimg/web.png'),
+                  _projectCard('Mobile App', 'Cross-platform mobile app',
+                      'assets/rakeshimg/apps.jpg'),
+                  _projectCard('UI Design', 'Creative user interfaces',
+                      'assets/rakeshimg/ui.jpeg'),
                 ],
               ),
             ),
@@ -501,11 +543,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 _skillItem('Dart', 0.85),
                 _skillItem('java', 0.85),
                 _skillItem('UI/UX Design', 0.75),
+                _skillItem('Git & Github', 0.75),
                 _skillItem('html', 0.85),
                 _skillItem('css', 0.85),
                 _skillItem('c', 0.8),
                 _skillItem('js', 0.8),
                 _skillItem('C#.Net', 0.5),
+                _skillItem('Python', 0.5),
               ],
             ),
           ],
@@ -514,41 +558,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _projectCard(String title, String description) {
-    bool isTaped = false;
-    // return Container(
-    //   width: 300,
-    //   padding: const EdgeInsets.all(20),
-    //   decoration: BoxDecoration(
-    //     color: const Color(0xFF2A2A2A),
-    //     borderRadius: BorderRadius.circular(15),
-    //   ),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Text(
-    //         title,
-    //         style: const TextStyle(
-    //           color: Colors.white,
-    //           fontSize: 24,
-    //           fontWeight: FontWeight.bold,
-    //         ),
-    //       ),
-    //       const SizedBox(height: 10),
-    //       Text(
-    //         description,
-    //         style: const TextStyle(
-    //           color: Colors.white70,
-    //           fontSize: 16,
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
-    return InkWell(
-      onTap: () {
+  Widget _projectCard(String title, String description, String url) {
+    return MouseRegion(
+      onEnter: (_) {
         setState(() {
-          isTaped = !isTaped;
+          isHovered = true;
+        });
+      },
+      onExit: (_) {
+        setState(() {
+          isHovered = false;
         });
       },
       child: Stack(
@@ -556,34 +575,38 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           AnimatedContainer(
             decoration: BoxDecoration(
-                color: const Color(0xFF2A2A2A),
-                borderRadius: BorderRadius.circular(20)),
+              color: const Color(0xFF2A2A2A),
+              borderRadius: BorderRadius.circular(20),
+            ),
             duration: const Duration(milliseconds: 350),
-            height: isTaped ? 350 : 320,
-            // height:500,
-            width: 250,
+            height: isHovered ? 350 : 320,
+            width: 280,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [Text(title), Text(description), SizedBox(height: 10)],
             ),
           ),
           AnimatedPositioned(
-            top: isTaped ? -100 : 10,
+            top: isHovered ? -100 : 10,
             duration: const Duration(milliseconds: 350),
             child: AnimatedContainer(
-              //color: Colors.red,
+              // color: Colors.red,
               duration: const Duration(milliseconds: 350),
-              height: isTaped ? 300 : 250,
-              width: 250,
+              height: isHovered ? 300 : 250,
+              width: 280,
               child: Column(
                 children: [
                   AnimatedContainer(
                     decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(url),
+                          fit: BoxFit.cover,
+                        ),
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(20)),
                     duration: Duration(milliseconds: 350),
-                    height: isTaped ? 300 : 250,
-                    width: isTaped ? 230 : 200,
+                    height: isHovered ? 300 : 250,
+                    width: isHovered ? 240 : 220,
                   ),
                 ],
               ),
