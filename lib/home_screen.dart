@@ -506,7 +506,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 spacing: 30,
                 children: [
                   _projectCard('Web App', 'A modern web application',
-                      'assets/rakeshimg/web.png'),
+                      'assets/rakeshimg/web.jpg'),
                   _projectCard('Mobile App', 'Cross-platform mobile app',
                       'assets/rakeshimg/apps.jpg'),
                   _projectCard('UI Design', 'Creative user interfaces',
