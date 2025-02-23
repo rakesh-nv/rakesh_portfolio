@@ -275,7 +275,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       //color: Colors.red,
       child: Column(
-
         children: [
           if (isSmallScreen || isMediumScreen) _buildProfileImage(),
           const SizedBox(height: 30),
@@ -307,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ],
-                      totalRepeatCount:5,
+                      totalRepeatCount: 5,
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -332,8 +331,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 30),
                     Container(
                       //color: Colors.blue,
-                      height:screenHeight*0.3,
-                      width: screenWidth*0.3,
+                      height: screenHeight * 0.3,
+                      width: screenWidth * 0.3,
                       child: Image.asset(
                         'assets/rakeshimg/flutter.png',
                       ),
@@ -377,10 +376,13 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
-          border: Border.all(color: const Color(0xFF00FF66), width: 2),
+          border: Border.all(
+            color: const Color(0xFF00FF66),
+            width: 2,
+          ),
           boxShadow: const [
             BoxShadow(
-              color: Color(0xFF00FF66),
+              //color: Color(0xFF00FF66),
               spreadRadius: 1,
               blurRadius: 5,
               offset: Offset(0, 2),
